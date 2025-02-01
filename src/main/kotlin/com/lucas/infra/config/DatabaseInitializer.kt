@@ -17,7 +17,7 @@ class DatabaseInitializer {
             val names = listOf("Laptop", "Smartphone", "Headphones", "Tablet", "Smartwatch")
             val descriptions = listOf("High performance", "Latest model", "Noise cancelling", "Lightweight", "Fitness tracker")
 
-            repeat(100) {
+            repeat(10000) {
                 val name = names[Random.nextInt(names.size)]
                 val description = descriptions[Random.nextInt(descriptions.size)]
                 val price = Random.nextDouble(100.0, 1000.0)

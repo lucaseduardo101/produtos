@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service
 class ProductService(private val productRepository: ProductRepository) : ProductUseCase {
 
     override fun getAllProducts(): List<ProductDTO> =
-        productRepository.findAll().map { it.toDTO() }
+        removeDuplicates(
+            productRepository.findAll()
+        )
+
+
 
     override fun getProductById(id: Long): ProductDTO =
         productRepository.findById(id)?.toDTO()
@@ -39,4 +43,18 @@ class ProductService(private val productRepository: ProductRepository) : Product
 
     private fun Product.toDTO() = ProductDTO(id, name, description, price)
     private fun ProductDTO.toDomain() = Product(id, name, description, price)
+
+    private fun removeDuplicates(products: List<Product>): List<ProductDTO> {
+        val seen = HashSet<Pair<String, Double>>()
+        val uniqueProducts = mutableListOf<Product>()
+
+        for (product in products) {
+            val key = product.name to product.price
+            if (seen.add(key)) {
+                uniqueProducts.add(product)
+            }
+        }
+
+        return uniqueProducts.map { it.toDTO() }
+    }
 }
